@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PropertyListComponent implements OnInit {
   SellRent = 1;
+  getAll = false;
   properties!: Array<IProperty>;
 
   constructor(
@@ -18,10 +19,14 @@ export class PropertyListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.route.snapshot.url.toString()) {
+    if (!this.route.snapshot.url.toString()) {
+      this.getAll = true; // Means we are on base URL
+    }
+    if (this.route.snapshot.url.toString() == 'rent-property') {
       this.SellRent = 2; // Means we are on rent-property URL else we are on base URL
     }
-    this.houseingService.getAllProperties(this.SellRent).subscribe(
+
+    this.houseingService.getAllProperties(this.SellRent, this.getAll).subscribe(
       (data) => {
         this.properties = data;
         console.log(data);
